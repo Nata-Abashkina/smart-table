@@ -85,17 +85,24 @@ const applySorting = initSorting([        // Нам нужно передать 
     sampleTable.header.elements.sortByTotal
 ]);
 
+const createPage = (el, page, isCurrent) => {
+  const input = el.querySelector('input');
+  const label = el.querySelector('span');
+
+  if (input) input.value = page;
+  if (label) label.textContent = page;
+  if (input && isCurrent) input.checked = true;
+
+  return el;
+};
+
+
 const applyPagination = initPagination(
-    sampleTable.pagination.elements,             // передаём сюда элементы пагинации, найденные в шаблоне
-    (el, page, isCurrent) => {                    // и колбэк, чтобы заполнять кнопки страниц данными
-        const input = el.querySelector('input');
-        const label = el.querySelector('span');
-        input.value = page;
-        input.checked = isCurrent;
-        label.textContent = page;
-        return el;
-    }
+  sampleTable.pagination.elements,    // 1. конфигурация пагинации
+  data,                             // 2. все данные (230 строк)
+  createPage                         // 3. функция createPage, определённая ранее
 );
+
 
 
 const appRoot = document.querySelector('#app');
