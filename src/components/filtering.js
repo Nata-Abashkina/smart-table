@@ -2,8 +2,11 @@ import {createComparison, rules} from "../lib/compare.js";
 
 // @todo: #4.3 — настроить компаратор
 const compare = createComparison(
-  ['skipNonExistentSourceFields', 'skipEmptyTargetValues', 'arrayAsRange'],
-  []
+  ['skipNonExistentSourceFields', 'skipEmptyTargetValues'],
+  [
+    rules.caseInsensitiveStringIncludes(),
+    rules.arrayAsRange()
+  ]
 );
 
 export function initFiltering(elements, indexes) {
@@ -39,9 +42,12 @@ export function initFiltering(elements, indexes) {
 
     // Преобразуем значения totalFrom и totalTo в числа и формируем диапазон
     const filteredState = { ...state };
-    if (state.totalFrom || state.totalTo) {
-      const from = state.totalFrom ? parseFloat(state.totalFrom) : undefined;
-      const to = state.totalTo ? parseFloat(state.totalTo) : undefined;
+    const hasTotalFrom = typeof state.totalFrom === 'string' && state.totalFrom.trim() !== '';
+    const hasTotalTo = typeof state.totalTo === 'string' && state.totalTo.trim() !== '';
+
+    if (hasTotalFrom || hasTotalTo) {
+      const from = hasTotalFrom ? parseFloat(state.totalFrom) : undefined;
+      const to = hasTotalTo ? parseFloat(state.totalTo) : undefined;
 
       // Удаляем исходные поля, чтобы правило arrayAsRange сработало корректно
       delete filteredState.totalFrom;
