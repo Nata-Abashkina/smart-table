@@ -1,8 +1,6 @@
 import './fonts/ys-display/fonts.css'
 import './style.css'
 
-import {data as sourceData} from "./data/dataset_1.js";
-
 import {initData} from "./data.js";
 import {processFormData} from "./lib/utils.js";
 
@@ -16,7 +14,7 @@ import {initPagination} from "./components/pagination.js";
 
 
 // Исходные данные используемые в render()
-const api = initData(sourceData);
+const api = initData();
 
 /**
  * Сбор и обработка полей из таблицы
@@ -48,9 +46,7 @@ async function render(action) {
     query = applyPagination(query, state, action);
     const {total, items} = await api.getRecords(query);
 
-
     updatePagination(total, { page: state.page, limit: state.rowsPerPage });
-
     
     sampleTable.render(items)
 }
